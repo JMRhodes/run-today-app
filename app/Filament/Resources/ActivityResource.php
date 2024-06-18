@@ -70,7 +70,19 @@ class ActivityResource extends Resource
                                 Model $record
                             ): string => "https://api.dicebear.com/9.x/initials/svg?seed={$record->user->name}"
                         )
-                        ->grow(false),
+                        ->grow(false)
+                        ->visibleFrom('md'),
+                    ImageColumn::make('user.avatar_url')
+                        ->circular()
+                        ->label('Name')
+                        ->height(24)
+                        ->defaultImageUrl(
+                            fn(
+                                Model $record
+                            ): string => "https://api.dicebear.com/9.x/initials/svg?seed={$record->user->name}"
+                        )
+                        ->grow(false)
+                        ->hiddenFrom('md'),
                     Tables\Columns\Layout\Stack::make([
                         TextColumn::make('user.name')
                             ->size('md')
@@ -80,18 +92,33 @@ class ActivityResource extends Resource
                             ->size('xs')
                             ->color('gray')
                             ->since(),
-                    ])->space(1),
+                    ])
+                        ->space(1)
+                    ->visibleFrom('md'),
+                    Tables\Columns\Layout\Stack::make([
+                        TextColumn::make('user.name')
+                            ->label(''),
+                        TextColumn::make('started_at')
+                            ->label('Date')
+                            ->size('xs')
+                            ->color('gray')
+                            ->since(),
+                    ])->hiddenFrom('md'),
                     TextColumn::make('type')
-                        ->badge(),
+                        ->badge()
+                        ->columnSpan(1)
+                        ->visibleFrom('md'),
                     TextColumn::make('distance')
                         ->size('lg')
-                        ->alignCenter()
+                        ->alignEnd()
                         ->description('miles', position: 'above')
-                        ->weight('bold'),
+                        ->weight('bold')
+                        ->columnSpan(1),
                     TextColumn::make('time')
                         ->size('lg')
-                        ->alignCenter()
-                        ->description('time', position: 'above'),
+                        ->alignEnd()
+                        ->description('time', position: 'above')
+                        ->columnSpan(1),
                 ]),
             ])
             ->defaultSort('started_at', 'desc')
