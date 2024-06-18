@@ -3,14 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 
-class User extends Authenticatable implements HasAvatar
+class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     use HasFactory, Notifiable;
 
@@ -35,6 +37,11 @@ class User extends Authenticatable implements HasAvatar
         'password',
         'remember_token',
     ];
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
+    }
 
     /**
      * Get the attributes that should be cast.
