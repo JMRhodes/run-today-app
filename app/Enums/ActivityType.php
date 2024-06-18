@@ -7,13 +7,15 @@ use Filament\Support\Contracts\HasLabel;
 
 enum ActivityType: string implements HasLabel, HasColor
 {
-    case RUN  = 'run';
-    case WALK = 'walk';
+    case RUN       = 'run';
+    case TREADMILL = 'treadmill';
+    case WALK      = 'walk';
 
     public function getLabel(): string
     {
         return match ($this) {
             self::RUN => 'Run',
+            self::TREADMILL => 'Treadmill',
             self::WALK => 'Walk'
         };
     }
@@ -23,6 +25,7 @@ enum ActivityType: string implements HasLabel, HasColor
     {
         return match ($this) {
             self::RUN => 'success',
+            self::TREADMILL => 'info',
             self::WALK => 'warning'
         };
     }
