@@ -13,32 +13,32 @@ class Activity extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $keyType = 'string';
-
     public $incrementing = false;
+
+    protected $keyType = 'string';
 
     protected $fillable = [
         'user_id',
         'type',
         'distance',
         'time',
-        'started_at'
+        'started_at',
     ];
 
     protected $casts = [
-        'id'   => 'string',
-        'type' => ActivityType::class
+        'id' => 'string',
+        'type' => ActivityType::class,
     ];
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public static function booted()
     {
         static::creating(function ($model) {
             $model->id = Str::uuid();
         });
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

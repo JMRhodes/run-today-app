@@ -5,11 +5,11 @@ namespace App\Enums;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum ActivityType: string implements HasLabel, HasColor
+enum ActivityType: string implements HasColor, HasLabel
 {
-    case RUN       = 'run';
+    case RUN = 'run';
     case TREADMILL = 'treadmill';
-    case WALK      = 'walk';
+    case WALK = 'walk';
 
     public function getLabel(): string
     {
@@ -19,7 +19,6 @@ enum ActivityType: string implements HasLabel, HasColor
             self::WALK => 'Walk'
         };
     }
-
 
     public function getColor(): string|array|null
     {

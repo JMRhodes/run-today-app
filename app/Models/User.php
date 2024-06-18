@@ -43,6 +43,16 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         return true;
     }
 
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class);
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar_url ? Storage::url("{$this->avatar_url}") : '';
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -52,17 +62,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
+            'password' => 'hashed',
         ];
-    }
-
-    public function activities(): HasMany
-    {
-        return $this->hasMany(Activity::class);
-    }
-
-    public function getFilamentAvatarUrl(): ?string
-    {
-        return $this->avatar_url ? Storage::url("$this->avatar_url") : '';
     }
 }

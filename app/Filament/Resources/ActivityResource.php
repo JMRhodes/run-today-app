@@ -3,20 +3,22 @@
 namespace App\Filament\Resources;
 
 use App\Enums\ActivityType;
-use App\Filament\Resources\ActivityResource\Pages;
+use App\Filament\Resources\ActivityResource\Pages\ListActivities;
 use App\Models\Activity;
-use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\Layout\Split;
 use Illuminate\Database\Eloquent\Model;
 
 class ActivityResource extends Resource
@@ -29,7 +31,7 @@ class ActivityResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Hidden::make('user_id')
+                Hidden::make('user_id')
                     ->default(auth()->user()->id),
                 TextInput::make('distance')
                     ->placeholder('0.00')
@@ -66,24 +68,13 @@ class ActivityResource extends Resource
                         ->circular()
                         ->label('Name')
                         ->defaultImageUrl(
-                            fn(
+                            fn (
                                 Model $record
                             ): string => "https://api.dicebear.com/9.x/initials/svg?seed={$record->user->name}"
                         )
                         ->grow(false)
                         ->visibleFrom('md'),
-                    ImageColumn::make('user.avatar_url')
-                        ->circular()
-                        ->label('Name')
-                        ->height(24)
-                        ->defaultImageUrl(
-                            fn(
-                                Model $record
-                            ): string => "https://api.dicebear.com/9.x/initials/svg?seed={$record->user->name}"
-                        )
-                        ->grow(false)
-                        ->hiddenFrom('md'),
-                    Tables\Columns\Layout\Stack::make([
+                    Stack::make([
                         TextColumn::make('user.name')
                             ->size('md')
                             ->label(''),
@@ -94,8 +85,8 @@ class ActivityResource extends Resource
                             ->since(),
                     ])
                         ->space(1)
-                    ->visibleFrom('md'),
-                    Tables\Columns\Layout\Stack::make([
+                        ->visibleFrom('md'),
+                    Stack::make([
                         TextColumn::make('user.name')
                             ->label(''),
                         TextColumn::make('started_at')
@@ -103,7 +94,8 @@ class ActivityResource extends Resource
                             ->size('xs')
                             ->color('gray')
                             ->since(),
-                    ])->hiddenFrom('md'),
+                    ])->hiddenFrom('md')
+                        ->space(1),
                     TextColumn::make('type')
                         ->badge()
                         ->columnSpan(1)
@@ -128,10 +120,10 @@ class ActivityResource extends Resource
             ->defaultPaginationPageOption(50)
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make()
+                    EditAction::make(),
+                    DeleteAction::make()
                         ->requiresConfirmation(),
-                ])
+                ]),
             ]);
     }
 
@@ -145,7 +137,7 @@ class ActivityResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListActivities::route('/')
+            'index' => ListActivities::route('/'),
         ];
     }
 }
