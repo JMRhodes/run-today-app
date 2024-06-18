@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\ActivityType;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 class Activity extends Model
@@ -23,9 +25,18 @@ class Activity extends Model
         'started_at'
     ];
 
-    protected $casts = ['id' => 'string'];
+    protected $casts = [
+        'id'   => 'string',
+        'type' => ActivityType::class
+    ];
 
-    public static function booted() {
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public static function booted()
+    {
         static::creating(function ($model) {
             $model->id = Str::uuid();
         });

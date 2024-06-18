@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
@@ -48,8 +49,13 @@ class User extends Authenticatable implements HasAvatar
         ];
     }
 
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class);
+    }
+
     public function getFilamentAvatarUrl(): ?string
     {
-        return $this->avatar_url ? Storage::url("$this->avatar_url") : null;
+        return $this->avatar_url ? Storage::url("$this->avatar_url") : '';
     }
 }
