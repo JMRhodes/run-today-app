@@ -18,6 +18,7 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
@@ -77,6 +78,7 @@ class ActivityResource extends Resource
                     Stack::make([
                         TextColumn::make('user.name')
                             ->size('md')
+                            ->searchable()
                             ->label(''),
                         TextColumn::make('started_at')
                             ->label('Date')
@@ -88,6 +90,7 @@ class ActivityResource extends Resource
                         ->visibleFrom('md'),
                     Stack::make([
                         TextColumn::make('user.name')
+                            ->searchable()
                             ->label(''),
                         TextColumn::make('started_at')
                             ->label('Date')
@@ -115,7 +118,8 @@ class ActivityResource extends Resource
             ])
             ->defaultSort('started_at', 'desc')
             ->filters([
-                //
+                SelectFilter::make('user_id')
+                    ->relationship('user', 'name'),
             ])
             ->defaultPaginationPageOption(50)
             ->actions([
